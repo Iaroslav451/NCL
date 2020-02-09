@@ -5,6 +5,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.openqa.selenium.WebElement;
 import support.Page;
 import definitions.pageSteps.HomepageStepDefs;
 import definitions.pageSteps.LogInHomepageStepDefs;
@@ -13,6 +14,8 @@ import definitions.pageSteps.ShoreExcursionsStepDefs;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -149,71 +152,28 @@ public class TestScenariosSteps extends Page {
     @Then("Only shore excursions within range are displayed")
     public void onlyShoreExcursionsWithinRangeAreDisplayed() {
         shoreExcursions.selectResultsPerPage48();
-        String rangePrice = driver().findElement(By.xpath("//span[@class='legend-column extremes']")).getText();
-        String updRangePrice = rangePrice.replace("$0", "").replace("$", "").replace("-", "");
-        //Assertion for list-holders //I know this is a mess
-        //list 1_____!___________________________________________________________________________!_____Copy past and replace numbers__________
-        String holder1 = driver().findElement(By.xpath("//ul[@class='holders-list ng-scope']//li[1]//article//div//div[@class='price-different clearfix']//ul//li//strong"))
-                .getText()
-                .replace("$", "").replace("USD", "").replace(".00", "").replace(" ", "");
-        if (holder1.equals(holder1)) {
-            assertThat(holder1).isLessThanOrEqualTo(updRangePrice);
-            System.out.println("No Errors in: " + holder1);
-        } else {
-            System.out.println("Error in: " + holder1);
+        List<WebElement> prices = driver().findElements(By.xpath("//ul[@class='holders-list ng-scope']//li//article//div//div[@class='price-different clearfix']//ul//li//strong"));
+        for (WebElement webElement : prices) {
+            String name = webElement.getText()
+                    .replace("$", "")
+                    .replace("USD", "")
+                    .replace(".00", "")
+                    .replace(" ", "");
+            int price = Integer.parseInt(name);
+            int priceForVerification = Integer.parseInt(shoreExcursions.getRangePrice());
+            String comp = (Integer.compare(price, priceForVerification) + "");
+            if (comp.equals("0")) {
+                //System.out.println("Pass");
+            }
+            if (comp.equals("-1")) {
+                //System.out.println("Pass");
+            }
+            if (comp.equals("1")) {
+                System.err.println("Not Pass");
+            }
         }
-        //list 2_____!___________________________________________________________________________!_____
-        String holder2 = driver().findElement(By.xpath("//ul[@class='holders-list ng-scope']//li[2]//article//div//div[@class='price-different clearfix']//ul//li//strong"))
-                .getText()
-                .replace("$", "").replace("USD", "").replace(".00", "").replace(" ", "");
-        if (holder2.equals(holder2)) {
-            assertThat(holder2).isLessThanOrEqualTo(updRangePrice);
-            System.out.println("No Errors in: " + holder2);
-        } else {
-            System.out.println("Error in: " + holder2);
-        }
-        //list 3_____!___________________________________________________________________________!_____
-        String holder3 = driver().findElement(By.xpath("//ul[@class='holders-list ng-scope']//li[3]//article//div//div[@class='price-different clearfix']//ul//li//strong"))
-                .getText()
-                .replace("$", "").replace("USD", "").replace(".00", "").replace(" ", "");
-        if (holder3.equals(holder3)) {
-            assertThat(holder3).isLessThanOrEqualTo(updRangePrice);
-            System.out.println("No Errors in: " + holder3);
-        } else {
-            System.out.println("Error in: " + holder3);
-        }
-        //list 4_____!___________________________________________________________________________!_____
-        String holder4 = driver().findElement(By.xpath("//ul[@class='holders-list ng-scope']//li[4]//article//div//div[@class='price-different clearfix']//ul//li//strong"))
-                .getText()
-                .replace("$", "").replace("USD", "").replace(".00", "").replace(" ", "");
-        if (holder4.equals(holder4)) {
-            assertThat(holder4).isLessThanOrEqualTo(updRangePrice);
-            System.out.println("No Errors in: " + holder4);
-        } else {
-            System.out.println("Error in: " + holder4);
-        }
-        //list 5_____!___________________________________________________________________________!_____
-        String holder5 = driver().findElement(By.xpath("//ul[@class='holders-list ng-scope']//li[5]//article//div//div[@class='price-different clearfix']//ul//li//strong"))
-                .getText()
-                .replace("$", "").replace("USD", "").replace(".00", "").replace(" ", "");
-        if (holder5.equals(holder5)) {
-            assertThat(holder5).isLessThanOrEqualTo(updRangePrice);
-            System.out.println("No Errors in: " + holder5);
-        } else {
-            System.out.println("Error in: " + holder5);
-        }
-        //list 6_____!___________________________________________________________________________!_____
-        String holder6 = driver().findElement(By.xpath("//ul[@class='holders-list ng-scope']//li[6]//article//div//div[@class='price-different clearfix']//ul//li//strong"))
-                .getText()
-                .replace("$", "").replace("USD", "").replace(".00", "").replace(" ", "");
-        if (holder6.equals(holder6)) {
-            assertThat(holder6).isLessThanOrEqualTo(updRangePrice);
-            System.out.println("No Errors in: " + holder6);
-        } else {
-            System.out.println("Error in: " + holder6);
-        }
-
-
     }
+
+
 }
 
