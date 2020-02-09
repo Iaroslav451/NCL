@@ -21,15 +21,25 @@ public class ShoreExcursionsStepDefs extends Page {
     @FindBy(xpath = "//a[@title='Port']")
     private WebElement port;
 
-    @FindBy (xpath = "//div[@id='explore_resultperpage_chosen']")
+    @FindBy(xpath = "//div[@id='explore_resultperpage_chosen']")
     private WebElement resultPerPage;
 
-    @FindBy (xpath = "//li[@data-option-array-index='3']")
+    @FindBy(xpath = "//li[@data-option-array-index='3']")
     private WebElement resultPerPage48;
+
+    @FindBy(xpath = "//span[@class='legend-column extremes']")
+    private WebElement legendColumnExtremes;
 
     //Methods//
 
-    public void selectResultsPerPage48(){
+    public String getRangePrice() {
+        return legendColumnExtremes.getText()
+                .replace("$0", "")
+                .replace("$", "")
+                .replace("-", "");
+    }
+
+    public void selectResultsPerPage48() {
         resultPerPage.click();
         resultPerPage48.click();
     }
@@ -50,8 +60,6 @@ public class ShoreExcursionsStepDefs extends Page {
     public void clickFindExcursions() {
         findExcursions.click();
     }
-
-
 
 
 }
